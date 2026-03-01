@@ -906,7 +906,7 @@
     button:hover {
       background: var(--color-primary, yellow);
     }
-  `,er=g([w("pv-fifty-key-keyboard")],er);var At=class{constructor(){this.code="";this.promptName="";this.keyboards=[];this.initialPhrases=[];this.emotions=[];this.aiConfigs={classic:{model:"gemini-2.0-flash-001",sentence:"SentenceGeneric20250311",word:"WordGeneric20240628"},fast:{model:"gemini-2.0-flash-lite-001",sentence:"SentenceGeneric20250311",word:"WordGeneric20240628"},smart:{model:"gemini-2.0-flash-001",sentence:"SentenceGeneric20250311",word:"WordGeneric20240628"},gemini_2_5_flash:{model:"gemini-2.5-flash",sentence:"SentenceGeneric20250311",word:"WordGeneric20240628"}}}segment(e){return e.split(" ")}join(e){return e.join(" ").replace(/ ([.,!?]+( |$))/g,"$1")+" "}appendWord(e,t){return t.startsWith("-")?e+t.slice(1)+" ":e+" "+t+" "}},yi=class extends At{constructor(){super(...arguments);this.code="en-US";this.promptName="English";this.emotions=[{emoji:"\u{1F4AC}",prompt:"Statement"},{emoji:"\u2753",prompt:"Question"},{emoji:"\u{1F64F}",prompt:"Request"},{emoji:"\u{1F6AB}",prompt:"Negative"}];this.initialPhrases=["I","You","They","What","Why","When","Where","How","Who","Can","Could you","Would you","Do you"]}},Uo=class extends yi{constructor(){super(...arguments);this.keyboards=[X`pv-alphanumeric-single-row-keyboard`]}render(){return p`${z("English (single-row keyboard)")}`}},Vo=class extends yi{constructor(){super(...arguments);this.keyboards=[X`pv-qwerty-keyboard`]}render(){return p`${z("English (QWERTY keyboard)")}`}},xi=class{constructor(){this.code="ja-JP";this.promptName="Japanese";this.keyboards=[];this.initialPhrases=["\u306F\u3044","\u3044\u3044\u3048","\u3042\u308A\u304C\u3068\u3046","\u3059\u307F\u307E\u305B\u3093","\u304A\u9858\u3044\u3057\u307E\u3059","\u79C1","\u3042\u306A\u305F","\u5F7C","\u5F7C\u5973","\u4ECA\u65E5","\u6628\u65E5","\u660E\u65E5"];this.emotions=[{emoji:"\u{1F4AC}",prompt:"\u5E73\u53D9",label:"\u666E\u901A"},{emoji:"\u2753",prompt:"\u7591\u554F",label:"\u8CEA\u554F"},{emoji:"\u{1F64F}",prompt:"\u4F9D\u983C",label:"\u304A\u9858\u3044"},{emoji:"\u{1F6AB}",prompt:"\u5426\u5B9A",label:"\u5426\u5B9A"}];this.aiConfigs={classic:{model:"gemini-2.5-flash",sentence:"SentenceJapanese20240628",word:"WordGeneric20240628"},fast:{model:"gemini-2.5-flash-lite",sentence:"SentenceJapanese20240628",word:"WordGeneric20240628"},smart:{model:"gemini-2.5-flash",sentence:"SentenceJapaneseLong20250603",word:"WordJapanese20250623"},gemini_2_5_flash:{model:"gemini-2.5-flash",sentence:"SentenceJapaneseLong20250603",word:"WordGeneric20240628"}};this.tinySegmenter=window.TinySegmenter?new window.TinySegmenter:null}segment(e){if(!this.tinySegmenter)return[e];let t=this.tinySegmenter?.segment(e);if(t.length===0)return t;let i=t[0],o=[i];for(let a of t.slice(1)){let s=i.charCodeAt(i.length-1),l=a.charCodeAt(0);s>=55296&&s<=56319&&l>=56320&&l<=57343?(o[o.length-1]+=a,i=o[o.length-1]):(o.push(a),i=a)}return o}join(e){return e.join("")}appendWord(e,t){return t.startsWith("-")?e+t.slice(1):e+t}},Wo=class extends xi{constructor(){super(...arguments);this.keyboards=[X`pv-hiragana-single-row-keyboard`,X`pv-alphanumeric-single-row-keyboard`]}render(){return p`${z("Japanese (single-row keyboard)")}`}},qo=class extends xi{constructor(){super(...arguments);this.keyboards=[X`pv-fifty-key-keyboard`,X`pv-qwerty-keyboard`]}render(){return p`${z("Japanese (Goj\u016Bon keyboard)")}`}},jo=class extends At{constructor(){super(...arguments);this.code="fr-FR";this.promptName="French";this.initialPhrases=["Je","Tu","Ils","Que","Pourquoi","Quand","O\xF9","Quelle","Qui","Peux-tu","Pourrais-tu","Ferais-tu","Fais-tu"]}},Go=class extends jo{constructor(){super(...arguments);this.keyboards=[X`pv-french-single-row-keyboard`]}render(){return p`${z("French (experimental)")}`}},Ko=class extends At{constructor(){super(...arguments);this.code="de-DE";this.promptName="German";this.initialPhrases=["Ich","Du","Sie","Was","Warum","Wann","Wo","Wie","Wer","Kannst","K\xF6nntest du","W\xFCrdest du","Tust du"]}},Yo=class extends Ko{constructor(){super(...arguments);this.keyboards=[X`pv-german-single-row-keyboard`]}render(){return p`${z("German (experimental)")}`}},Xo=class extends At{constructor(){super(...arguments);this.code="sv-SE";this.promptName="Swedish";this.initialPhrases=["Jag","Du","De","Vad","Varf\xF6r","N\xE4r","Var","Hur","Vem","Burk","Kan","Skulle du","G\xF6r du"]}},Zo=class extends Xo{constructor(){super(...arguments);this.keyboards=[X`pv-swedish-single-row-keyboard`]}render(){return p`${z("Swedish (experimental)")}`}},Jo=class{constructor(){this.code="zh-CN";this.promptName="Mandarin";this.keyboards=[];this.separetor="";this.initialPhrases=["\u4F60","\u6211","\u4ED6","\u5979","\u5B83","\u597D","\u4ECA\u5929","\u6628\u5929","\u660E\u5929"];this.aiConfigs={classic:{model:"gemini-2.5-flash",sentence:"SentenceMandarin20250616",word:"WordMandarin20250616"},fast:{model:"gemini-2.5-flash-lite",sentence:"SentenceMandarin20250616",word:"WordMandarin20250616"},smart:{model:"gemini-2.5-flash",sentence:"SentenceMandarin20250616",word:"WordMandarin20250616"},gemini_2_5_flash:{model:"gemini-2.5-flash",sentence:"SentenceMandarin20250616",word:"WordMandarin20250616"}}}segment(e){return Array.from(e)}join(e){return e.join("")}appendWord(e,t){return e=e.replace(/[a-z]+$/,""),t.startsWith("-")?e+t.slice(1):e+t}},Qo=class extends Jo{constructor(){super(...arguments);this.keyboards=[X`pv-alphanumeric-single-row-keyboard`]}render(){return p`${z("Mandarin (single-row keyboard)")}`}},Ue={englishWithSingleRowKeyboard:new Uo,englishWithQWERYKeyboard:new Vo,japaneseWithSingleRowKeyboard:new Wo,japaneseWithFullkeyboard:new qo,frenchExperimental:new Go,germanExperimental:new Yo,mandarinWithSingleRowKeyboard:new Qo,swedishExperimental:new Zo};var Jl={okClick:"ok-click"},Qe=class extends Ne(_){constructor(){super(...arguments);this.activeSettingsTabIndex=0}show(){this.settingsDialog?.show()}fireEvent(t){this.dispatchEvent(new CustomEvent(t,{detail:{callee:this},bubbles:!0,composed:!0}))}render(){let t=p`
+  `,er=g([w("pv-fifty-key-keyboard")],er);var At=class{constructor(){this.code="";this.promptName="";this.keyboards=[];this.initialPhrases=[];this.emotions=[];this.aiConfigs={classic:{model:"gemini-2.0-flash-001",sentence:"SentenceGeneric20250311",word:"WordGeneric20240628"},fast:{model:"gemini-2.0-flash-lite-001",sentence:"SentenceGeneric20250311",word:"WordGeneric20240628"},smart:{model:"gemini-2.0-flash-001",sentence:"SentenceGeneric20250311",word:"WordGeneric20240628"},gemini_2_5_flash:{model:"gemini-2.5-flash",sentence:"SentenceGeneric20250311",word:"WordGeneric20240628"}}}segment(e){return e.split(" ")}join(e){return e.join(" ").replace(/ ([.,!?]+( |$))/g,"$1")+" "}appendWord(e,t){return t.startsWith("-")?e+t.slice(1)+" ":e+" "+t+" "}},yi=class extends At{constructor(){super(...arguments);this.code="en-US";this.promptName="English";this.emotions=[{emoji:"sentiment_satisfied",prompt:"Statement"},{emoji:"help_outline",prompt:"Question"},{emoji:"volunteer_activism",prompt:"Request"},{emoji:"cancel",prompt:"Negative"}];this.initialPhrases=["I","You","They","What","Why","When","Where","How","Who","Can","Could you","Would you","Do you"]}},Uo=class extends yi{constructor(){super(...arguments);this.keyboards=[X`pv-alphanumeric-single-row-keyboard`]}render(){return p`${z("English (single-row keyboard)")}`}},Vo=class extends yi{constructor(){super(...arguments);this.keyboards=[X`pv-qwerty-keyboard`]}render(){return p`${z("English (QWERTY keyboard)")}`}},xi=class{constructor(){this.code="ja-JP";this.promptName="Japanese";this.keyboards=[];this.initialPhrases=["\u306F\u3044","\u3044\u3044\u3048","\u3042\u308A\u304C\u3068\u3046","\u3059\u307F\u307E\u305B\u3093","\u304A\u9858\u3044\u3057\u307E\u3059","\u79C1","\u3042\u306A\u305F","\u5F7C","\u5F7C\u5973","\u4ECA\u65E5","\u6628\u65E5","\u660E\u65E5"];this.emotions=[{emoji:"sentiment_satisfied",prompt:"\u5E73\u53D9",label:"\u666E\u901A"},{emoji:"help_outline",prompt:"\u7591\u554F",label:"\u8CEA\u554F"},{emoji:"volunteer_activism",prompt:"\u4F9D\u983C",label:"\u304A\u9858\u3044"},{emoji:"cancel",prompt:"\u5426\u5B9A",label:"\u5426\u5B9A"}];this.aiConfigs={classic:{model:"gemini-2.5-flash",sentence:"SentenceJapanese20240628",word:"WordGeneric20240628"},fast:{model:"gemini-2.5-flash-lite",sentence:"SentenceJapanese20240628",word:"WordGeneric20240628"},smart:{model:"gemini-2.5-flash",sentence:"SentenceJapaneseLong20250603",word:"WordJapanese20250623"},gemini_2_5_flash:{model:"gemini-2.5-flash",sentence:"SentenceJapaneseLong20250603",word:"WordGeneric20240628"}};this.tinySegmenter=window.TinySegmenter?new window.TinySegmenter:null}segment(e){if(!this.tinySegmenter)return[e];let t=this.tinySegmenter?.segment(e);if(t.length===0)return t;let i=t[0],o=[i];for(let a of t.slice(1)){let s=i.charCodeAt(i.length-1),l=a.charCodeAt(0);s>=55296&&s<=56319&&l>=56320&&l<=57343?(o[o.length-1]+=a,i=o[o.length-1]):(o.push(a),i=a)}return o}join(e){return e.join("")}appendWord(e,t){return t.startsWith("-")?e+t.slice(1):e+t}},Wo=class extends xi{constructor(){super(...arguments);this.keyboards=[X`pv-hiragana-single-row-keyboard`,X`pv-alphanumeric-single-row-keyboard`]}render(){return p`${z("Japanese (single-row keyboard)")}`}},qo=class extends xi{constructor(){super(...arguments);this.keyboards=[X`pv-fifty-key-keyboard`,X`pv-qwerty-keyboard`]}render(){return p`${z("Japanese (Goj\u016Bon keyboard)")}`}},jo=class extends At{constructor(){super(...arguments);this.code="fr-FR";this.promptName="French";this.initialPhrases=["Je","Tu","Ils","Que","Pourquoi","Quand","O\xF9","Quelle","Qui","Peux-tu","Pourrais-tu","Ferais-tu","Fais-tu"]}},Go=class extends jo{constructor(){super(...arguments);this.keyboards=[X`pv-french-single-row-keyboard`]}render(){return p`${z("French (experimental)")}`}},Ko=class extends At{constructor(){super(...arguments);this.code="de-DE";this.promptName="German";this.initialPhrases=["Ich","Du","Sie","Was","Warum","Wann","Wo","Wie","Wer","Kannst","K\xF6nntest du","W\xFCrdest du","Tust du"]}},Yo=class extends Ko{constructor(){super(...arguments);this.keyboards=[X`pv-german-single-row-keyboard`]}render(){return p`${z("German (experimental)")}`}},Xo=class extends At{constructor(){super(...arguments);this.code="sv-SE";this.promptName="Swedish";this.initialPhrases=["Jag","Du","De","Vad","Varf\xF6r","N\xE4r","Var","Hur","Vem","Burk","Kan","Skulle du","G\xF6r du"]}},Zo=class extends Xo{constructor(){super(...arguments);this.keyboards=[X`pv-swedish-single-row-keyboard`]}render(){return p`${z("Swedish (experimental)")}`}},Jo=class{constructor(){this.code="zh-CN";this.promptName="Mandarin";this.keyboards=[];this.separetor="";this.initialPhrases=["\u4F60","\u6211","\u4ED6","\u5979","\u5B83","\u597D","\u4ECA\u5929","\u6628\u5929","\u660E\u5929"];this.emotions=[];this.aiConfigs={classic:{model:"gemini-2.5-flash",sentence:"SentenceMandarin20250616",word:"WordMandarin20250616"},fast:{model:"gemini-2.5-flash-lite",sentence:"SentenceMandarin20250616",word:"WordMandarin20250616"},smart:{model:"gemini-2.5-flash",sentence:"SentenceMandarin20250616",word:"WordMandarin20250616"},gemini_2_5_flash:{model:"gemini-2.5-flash",sentence:"SentenceMandarin20250616",word:"WordMandarin20250616"}}}segment(e){return Array.from(e)}join(e){return e.join("")}appendWord(e,t){return e=e.replace(/[a-z]+$/,""),t.startsWith("-")?e+t.slice(1):e+t}},Qo=class extends Jo{constructor(){super(...arguments);this.keyboards=[X`pv-alphanumeric-single-row-keyboard`]}render(){return p`${z("Mandarin (single-row keyboard)")}`}},Ue={englishWithSingleRowKeyboard:new Uo,englishWithQWERYKeyboard:new Vo,japaneseWithSingleRowKeyboard:new Wo,japaneseWithFullkeyboard:new qo,frenchExperimental:new Go,germanExperimental:new Yo,mandarinWithSingleRowKeyboard:new Qo,swedishExperimental:new Zo};var Jl={okClick:"ok-click"},Qe=class extends Ne(_){constructor(){super(...arguments);this.activeSettingsTabIndex=0}show(){this.settingsDialog?.show()}fireEvent(t){this.dispatchEvent(new CustomEvent(t,{detail:{callee:this},bubbles:!0,composed:!0}))}render(){let t=p`
       <div class="form-section">
         <label>
           ${z("Persona")}
@@ -1440,7 +1440,7 @@
             @click=${()=>{this.selected=t.prompt===this.selected?"":t.prompt,this.dispatchEvent(new Event("select"))}}
             class="${t.prompt===this.selected?"selected":""}"
           >
-            <div class="emoji">${t.emoji}</div>
+            <div class="icon material-symbols-outlined">${t.emoji}</div>
             <div class="label">
               ${t.label??t.prompt}
             </div>
@@ -1463,27 +1463,51 @@
     }
 
     button {
+      align-items: center;
       border-radius: 1rem;
       border: solid 3px transparent;
-      color: #202124;
+      color: rgba(128, 128, 128, 0.8);
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
       font-family: var(--font-family-base);
+      gap: 0.25rem;
       padding: 0.5rem 1rem;
       width: 8rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      button {
+        color: rgba(200, 200, 200, 0.8);
+      }
     }
 
     button:hover,
     button.selected {
       background: var(--color-primary);
+      color: var(--color-on-primary);
     }
 
     button.selected {
-      border-color: black;
+      border-color: var(--color-on-background);
     }
 
-    button .emoji {
-      font-size: 3rem;
+    button .icon {
+      font-size: 2.5rem;
       line-height: 1;
+    }
+
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
     }
 
     button .label {

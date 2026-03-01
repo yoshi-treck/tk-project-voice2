@@ -18,9 +18,9 @@ import './keyboards/pv-single-row-keyboard.js';
 import './keyboards/pv-qwerty-keyboard.js';
 import './keyboards/pv-fifty-key-keyboard.js';
 
-import {msg} from '@lit/localize';
-import {html, TemplateResult} from 'lit';
-import {literal, StaticValue} from 'lit/static-html.js';
+import { msg } from '@lit/localize';
+import { html, TemplateResult } from 'lit';
+import { literal, StaticValue } from 'lit/static-html.js';
 
 declare class TinySegmenter {
   segment(text: string): string[];
@@ -52,11 +52,11 @@ export interface Language {
   readonly initialPhrases: string[];
 
   /** Sentence emotions */
-  readonly emotions: {emoji: string; prompt: string; label?: string}[];
+  readonly emotions: { emoji: string; prompt: string; label?: string }[];
 
   /** AI configs for this language. */
   readonly aiConfigs: {
-    [key: string]: {model: string; sentence: string; word: string};
+    [key: string]: { model: string; sentence: string; word: string };
   };
 
   // Renders the language name in a human readable way.
@@ -88,7 +88,7 @@ abstract class LatinScriptLanguage implements Language {
   promptName = '';
   keyboards: StaticValue[] = [];
   initialPhrases: string[] = [];
-  emotions: {emoji: string; prompt: string; label?: string}[] = [];
+  emotions: { emoji: string; prompt: string; label?: string }[] = [];
   aiConfigs = {
     classic: {
       model: 'gemini-2.0-flash-001',
@@ -137,11 +137,11 @@ abstract class LatinScriptLanguage implements Language {
 abstract class English extends LatinScriptLanguage {
   code = 'en-US';
   promptName = 'English';
-  emotions: {emoji: string; prompt: string; label?: string}[] = [
-    {emoji: '💬', prompt: 'Statement'},
-    {emoji: '❓', prompt: 'Question'},
-    {emoji: '🙏', prompt: 'Request'},
-    {emoji: '🚫', prompt: 'Negative'},
+  emotions: { emoji: string; prompt: string; label?: string }[] = [
+    { emoji: 'sentiment_satisfied', prompt: 'Statement' },
+    { emoji: 'help_outline', prompt: 'Question' },
+    { emoji: 'volunteer_activism', prompt: 'Request' },
+    { emoji: 'cancel', prompt: 'Negative' },
   ];
   initialPhrases = [
     'I',
@@ -193,10 +193,10 @@ abstract class Japanese implements Language {
     '明日',
   ];
   emotions = [
-    {emoji: '💬', prompt: '平叙', label: '普通'},
-    {emoji: '❓', prompt: '疑問', label: '質問'},
-    {emoji: '🙏', prompt: '依頼', label: 'お願い'},
-    {emoji: '🚫', prompt: '否定', label: '否定'},
+    { emoji: 'sentiment_satisfied', prompt: '平叙', label: '普通' },
+    { emoji: 'help_outline', prompt: '疑問', label: '質問' },
+    { emoji: 'volunteer_activism', prompt: '依頼', label: 'お願い' },
+    { emoji: 'cancel', prompt: '否定', label: '否定' },
   ];
   aiConfigs = {
     classic: {
@@ -374,6 +374,7 @@ abstract class Mandarin implements Language {
   keyboards: StaticValue[] = [];
   separetor = '';
   initialPhrases = ['你', '我', '他', '她', '它', '好', '今天', '昨天', '明天'];
+  emotions: { emoji: string; prompt: string; label?: string }[] = [];
   aiConfigs = {
     classic: {
       model: 'gemini-2.5-flash',
@@ -421,7 +422,7 @@ class MandarinWithSingleRowKeyboard extends Mandarin {
   }
 }
 
-export const LANGUAGES: {[name: string]: Language} = {
+export const LANGUAGES: { [name: string]: Language } = {
   englishWithSingleRowKeyboard: new EnglishWithSingleRowKeyboard(),
   englishWithQWERYKeyboard: new EnglishWithQWERYKeyboard(),
   japaneseWithSingleRowKeyboard: new JapaneseWithSingleRowKeyboard(),

@@ -298,6 +298,16 @@ class State {
     this.isMicrophoneOnSignal.set(newIsMicrophoneOn);
   }
 
+  private isAppSpeakingSignal = signal(false);
+
+  get isAppSpeaking() {
+    return this.isAppSpeakingSignal.get();
+  }
+
+  set isAppSpeaking(newIsAppSpeaking: boolean) {
+    this.isAppSpeakingSignal.set(newIsAppSpeaking);
+  }
+
   lastInputSpeech = '';
   lastOutputSpeech = '';
 

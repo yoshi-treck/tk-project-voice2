@@ -313,9 +313,22 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
   }
 
   private startTts() {
-
     const utterance = new SpeechSynthesisUtterance(this.state.text);
     utterance.lang = this.state.lang.code;
+
+    utterance.onstart = () => {
+      console.log('[TTS] Start speaking (Manual):', this.state.text);
+      this.state.isAppSpeaking = true;
+    };
+    utterance.onend = () => {
+      console.log('[TTS] End speaking (Manual). Starting guard time.');
+      this.onTtsEnd();
+    };
+    utterance.onerror = (event: any) => {
+      console.error('[TTS] Error (Manual):', event.error);
+      this.onTtsEnd();
+    };
+
     utterance.rate = Math.pow(2, this.state.voiceSpeakingRate / 10);
     utterance.pitch = (this.state.voicePitch + 20) / 20;
     const tts = window.speechSynthesis;
@@ -325,9 +338,7 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
     if (voice) {
       utterance.voice = voice;
     }
-    utterance.addEventListener('end', () => {
-      this.onTtsEnd();
-    });
+    this.state.isAppSpeaking = true; // Set immediately
     tts.speak(utterance);
     this.isTtsReading = true;
 
@@ -339,5 +350,10 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
 
   private onTtsEnd() {
     this.isTtsReading = false;
+    // Keep isAppSpeaking true for a short duration after speech ends
+    setTimeout(() => {
+      this.state.isAppSpeaking = false;
+      console.log('[TTS] Guard time ended (Manual).');
+    }, 1000);
   }
 }

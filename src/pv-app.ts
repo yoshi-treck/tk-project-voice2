@@ -429,6 +429,10 @@ export class PvAppElement extends SignalWatcher(LitElement) {
     this.speechRecognition.continuous = true;
     this.speechRecognition.interimResults = false;
     this.speechRecognition.onresult = (event: SpeechRecognitionEvent) => {
+      if (this.state.isAppSpeaking) {
+        console.log('[SpeechRecognition] Ignored result because app is speaking.');
+        return;
+      }
       const lastResult = event.results[event.results.length - 1];
       if (lastResult && lastResult.isFinal && lastResult[0]) {
         const recognizedText = lastResult[0].transcript.trim();
@@ -727,6 +731,25 @@ export class PvAppElement extends SignalWatcher(LitElement) {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = this.state.lang.code;
+
+    utterance.onstart = () => {
+      console.log('[TTS] Start speaking:', text);
+      this.state.isAppSpeaking = true;
+    };
+    utterance.onend = () => {
+      console.log('[TTS] End speaking. Starting guard time.');
+      // Keep isAppSpeaking true for a short duration after speech ends
+      // to avoid catching the echo in speech recognition.
+      setTimeout(() => {
+        this.state.isAppSpeaking = false;
+        console.log('[TTS] Guard time ended.');
+      }, 1000);
+    };
+    utterance.onerror = (event: any) => {
+      console.error('[TTS] Error:', event.error);
+      this.state.isAppSpeaking = false;
+    };
+
     const speakingRateBase = 1.0;
     const rateStep = 0.1;
     utterance.rate = speakingRateBase + this.state.voiceSpeakingRate * rateStep;
@@ -738,6 +761,7 @@ export class PvAppElement extends SignalWatcher(LitElement) {
       const voice = voices.find(v => v.name === this.state.voiceName);
       if (voice) utterance.voice = voice;
     }
+    this.state.isAppSpeaking = true; // Set immediately just in case onstart is delayed
     window.speechSynthesis.speak(utterance);
   }
 

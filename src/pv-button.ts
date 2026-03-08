@@ -51,8 +51,8 @@ export class PvButtonElement extends LitElement {
       color: var(--color-on-surface);
       cursor: pointer;
       font-family: 'Roboto Mono', 'Noto Sans JP', monospace;
-      font-size: min(5vh, 3rem);
-      padding: 0 1rem;
+      font-size: min(7vh, 4rem);
+      padding: 0.4rem 1.5rem;
     }
   `;
   render() {

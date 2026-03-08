@@ -32,6 +32,9 @@ export const CONFIG_DEFAULT: Config = {
   ttsVoice: '',
   voicePitch: 0.0,
   voiceSpeakingRate: 0.0,
+  speakOnSuggestionSelect: false,
 };
 
 export const LARGE_MARGIN_LINE_LIMIT = 4;
+
+export const INITIAL_WORD_SUGGESTION_LIMIT = 6;

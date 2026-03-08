@@ -23,13 +23,14 @@ export interface Config {
   // This is kept for backward compatibility, especially for Japanese UXR users.
   // See also loadState() in state.ts
   initialPhrases: string[];
-  initialPhrasesPerLanguage: {[languageKey: string]: string[]};
+  initialPhrasesPerLanguage: { [languageKey: string]: string[] };
   messageHistoryWithPrefix: [string, string, number][];
   persona: string;
   sentenceSmallMargin: boolean;
   ttsVoice: string;
   voicePitch: number;
   voiceSpeakingRate: number;
+  speakOnSuggestionSelect: boolean;
 }
 
 /** Provides methods to read and write configurations to local storage. */
@@ -59,7 +60,7 @@ export class ConfigStorage {
       return this.defaultValues[key];
     }
     try {
-      const {value} = JSON.parse(retPair);
+      const { value } = JSON.parse(retPair);
       return value;
     } catch (e) {
       // Returns the default value if the stored value is broken.
@@ -75,7 +76,7 @@ export class ConfigStorage {
   write<K extends keyof Config>(key: K, value: Config[K]) {
     const fullKey = `${this.domainHead}.${key}`;
     // Write in a compatible format with the exiting version.
-    const str = JSON.stringify({value});
+    const str = JSON.stringify({ value });
     localStorage.setItem(fullKey, str);
   }
 }

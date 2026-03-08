@@ -26,14 +26,14 @@ import '@material/web/select/outlined-select.js';
 import '@material/web/dialog/dialog.js';
 import '@material/web/slider/slider.js';
 
-import {localized, msg} from '@lit/localize';
-import {SignalWatcher} from '@lit-labs/signals';
-import {MdTabs} from '@material/web/tabs/tabs.js';
-import {css, html, LitElement} from 'lit';
-import {customElement, property, query} from 'lit/decorators.js';
+import { localized, msg } from '@lit/localize';
+import { SignalWatcher } from '@lit-labs/signals';
+import { MdTabs } from '@material/web/tabs/tabs.js';
+import { css, html, LitElement } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 
-import {LANGUAGES} from './language.js';
-import {State} from './state.js';
+import { LANGUAGES } from './language.js';
+import { State } from './state.js';
 
 const EVENT_KEY = {
   okClick: 'ok-click',
@@ -44,7 +44,7 @@ type EventKey = (typeof EVENT_KEY)[keyof typeof EVENT_KEY];
 @localized()
 @customElement('pv-setting-panel')
 export class PvSettingPanel extends SignalWatcher(LitElement) {
-  @property({type: Object})
+  @property({ type: Object })
   private state!: State;
 
   static styles = css`
@@ -105,7 +105,7 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
     }
   `;
 
-  @property({type: Number, reflect: true})
+  @property({ type: Number, reflect: true })
   private activeSettingsTabIndex = 0;
 
   @query('md-dialog')
@@ -118,7 +118,7 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
   fireEvent(key: EventKey) {
     this.dispatchEvent(
       new CustomEvent(key, {
-        detail: {callee: this},
+        detail: { callee: this },
         bubbles: true,
         composed: true,
       }),
@@ -138,8 +138,8 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
               type="textarea"
               rows="5"
               @input=${(e: Event) => {
-                this.state.persona = (e.target as HTMLTextAreaElement).value;
-              }}
+        this.state.persona = (e.target as HTMLTextAreaElement).value;
+      }}
               value="${this.state.persona}"
             >
             </md-filled-text-field>
@@ -156,10 +156,10 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
               rows="3"
               value="${this.state.initialPhrases.join('\n')}"
               @input=${(e: Event) => {
-                this.state.initialPhrases = (e.target as HTMLInputElement).value
-                  .split('\n')
-                  .filter(str => str);
-              }}
+        this.state.initialPhrases = (e.target as HTMLInputElement).value
+          .split('\n')
+          .filter(str => str);
+      }}
             >
             </md-filled-text-field>
           </p>
@@ -172,9 +172,9 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
         <md-outlined-select
           label="${msg('AI')}"
           @change=${(e: Event) => {
-            const selected = e.composedPath()[0];
-            this.state.aiConfig = (selected as HTMLSelectElement).value;
-          }}
+        const selected = e.composedPath()[0];
+        this.state.aiConfig = (selected as HTMLSelectElement).value;
+      }}
         >
           <md-select-option
             ?selected="${this.state.aiConfig === 'fast'}"
@@ -208,8 +208,8 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
           <md-switch
             ?selected=${this.state.expandAtOrigin}
             @change=${() => {
-              this.state.expandAtOrigin = !this.state.expandAtOrigin;
-            }}
+        this.state.expandAtOrigin = !this.state.expandAtOrigin;
+      }}
           ></md-switch>
         </label>
       </div>
@@ -219,8 +219,8 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
           <md-switch
             ?selected=${this.state.sentenceSmallMargin}
             @change=${() => {
-              this.state.sentenceSmallMargin = !this.state.sentenceSmallMargin;
-            }}
+        this.state.sentenceSmallMargin = !this.state.sentenceSmallMargin;
+      }}
           ></md-switch>
         </label>
       </div>
@@ -230,8 +230,20 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
           <md-switch
             ?selected=${this.state.enableEarcons}
             @change=${() => {
-              this.state.enableEarcons = !this.state.enableEarcons;
-            }}
+        this.state.enableEarcons = !this.state.enableEarcons;
+      }}
+          ></md-switch>
+        </label>
+      </div>
+      <div class="form-section">
+        <label>
+          ${msg('Speak on suggestion select')}
+          <md-switch
+            ?selected=${this.state.speakOnSuggestionSelect}
+            @change=${() => {
+        this.state.speakOnSuggestionSelect =
+          !this.state.speakOnSuggestionSelect;
+      }}
           ></md-switch>
         </label>
       </div>
@@ -243,9 +255,9 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
                 <md-switch
                   ?selected=${this.state.enableConversationMode}
                   @change=${() => {
-                    this.state.enableConversationMode =
-                      !this.state.enableConversationMode;
-                  }}
+            this.state.enableConversationMode =
+              !this.state.enableConversationMode;
+          }}
                 ></md-switch>
               </label>
             </div>
@@ -258,8 +270,8 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
         <div class="language-select">
           <div>
             ${Object.entries(LANGUAGES).map(
-              ([label, lang]) =>
-                html`<div class="language-option">
+          ([label, lang]) =>
+            html`<div class="language-option">
                   <div class="language-option-label">
                     <label>${lang.render()}</label>
                   </div>
@@ -267,24 +279,24 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
                     <md-checkbox
                       ?checked="${this.state.checkedLanguages.includes(label)}"
                       ?disabled="${this.state.checkedLanguages.length === 1 &&
-                      this.state.checkedLanguages.includes(label)}"
+              this.state.checkedLanguages.includes(label)}"
                       @change=${() => {
-                        if (this.state.checkedLanguages.includes(label)) {
-                          this.state.checkedLanguages =
-                            this.state.checkedLanguages.filter(
-                              lang => lang !== label,
-                            );
-                        } else {
-                          this.state.checkedLanguages = [
-                            ...this.state.checkedLanguages,
-                            label,
-                          ];
-                        }
-                      }}
+                if (this.state.checkedLanguages.includes(label)) {
+                  this.state.checkedLanguages =
+                    this.state.checkedLanguages.filter(
+                      lang => lang !== label,
+                    );
+                } else {
+                  this.state.checkedLanguages = [
+                    ...this.state.checkedLanguages,
+                    label,
+                  ];
+                }
+              }}
                     ></md-checkbox>
                   </div>
                 </div>`,
-            )}
+        )}
           </div>
         </div>
       </div>
@@ -295,9 +307,9 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
         <md-outlined-select
           label="${msg('TTS Voice')}"
           @change=${(e: Event) => {
-            const selected = e.target;
-            this.state.voiceName = (selected as HTMLSelectElement).value;
-          }}
+        const selected = e.target;
+        this.state.voiceName = (selected as HTMLSelectElement).value;
+      }}
         >
           <md-select-option
             value="Default"
@@ -306,17 +318,17 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
             <div slot="headline">Default</div>
           </md-select-option>
           ${window.speechSynthesis
-            .getVoices()
-            .filter(voice => voice.lang.startsWith(this.state.lang.code))
-            .map(
-              voice =>
-                html`<md-select-option
+        .getVoices()
+        .filter(voice => voice.lang.startsWith(this.state.lang.code))
+        .map(
+          voice =>
+            html`<md-select-option
                   value="${voice.name}"
                   ?selected="${this.state.voiceName === voice.name}"
                 >
                   <div slot="headline">${voice.name}</div>
                 </md-select-option>`,
-            )}
+        )}
 
         </md-outlined-select>
       </div>
@@ -329,10 +341,10 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
             max="10"
             value="${this.state.voiceSpeakingRate}"
             @change=${(e: Event) => {
-              this.state.voiceSpeakingRate = Number(
-                (e.target as HTMLInputElement).value,
-              );
-            }}
+        this.state.voiceSpeakingRate = Number(
+          (e.target as HTMLInputElement).value,
+        );
+      }}
           >
           </md-slider>
         </label>
@@ -346,10 +358,10 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
             max="10"
             value="${this.state.voicePitch}"
             @change=${(e: Event) => {
-              this.state.voicePitch = Number(
-                (e.target as HTMLInputElement).value,
-              );
-            }}
+        this.state.voicePitch = Number(
+          (e.target as HTMLInputElement).value,
+        );
+      }}
           >
           </md-slider>
         </label>
@@ -367,10 +379,10 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
         <form slot="content" id="form-id" method="dialog">
           <md-tabs
             @change="${(e: Event) => {
-              if (e.target instanceof MdTabs) {
-                this.activeSettingsTabIndex = e.target.activeTabIndex;
-              }
-            }}"
+        if (e.target instanceof MdTabs) {
+          this.activeSettingsTabIndex = e.target.activeTabIndex;
+        }
+      }}"
           >
             <md-primary-tab ?active="${this.activeSettingsTabIndex === 0}">
               ${msg('General')}
@@ -389,10 +401,10 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
           <md-text-button
             form="form-id"
             @click="${() => {
-              // TODO: Revert the change when cancelled.
-              this.settingsDialog?.close();
-              this.fireEvent(EVENT_KEY.okClick);
-            }}"
+        // TODO: Revert the change when cancelled.
+        this.settingsDialog?.close();
+        this.fireEvent(EVENT_KEY.okClick);
+      }}"
             >OK</md-text-button
           >
         </div>

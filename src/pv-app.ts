@@ -33,37 +33,37 @@ import {
   msg,
   str,
 } from '@lit/localize';
-import {SignalWatcher} from '@lit-labs/signals';
-import {diff_match_patch} from 'diff-match-patch';
-import {html, LitElement} from 'lit';
-import {customElement, property, query, queryAll} from 'lit/decorators.js';
+import { SignalWatcher } from '@lit-labs/signals';
+import { diff_match_patch } from 'diff-match-patch';
+import { html, LitElement } from 'lit';
+import { customElement, property, query, queryAll } from 'lit/decorators.js';
 
-import {AudioManager} from './audio-manager.js';
-import {ConfigStorage} from './config-storage.js';
-import {CONFIG_DEFAULT, LARGE_MARGIN_LINE_LIMIT} from './constants.js';
-import {InputSource, InputSourceKind} from './input-history.js';
+import { AudioManager } from './audio-manager.js';
+import { ConfigStorage } from './config-storage.js';
+import { CONFIG_DEFAULT, LARGE_MARGIN_LINE_LIMIT, INITIAL_WORD_SUGGESTION_LIMIT } from './constants.js';
+import { InputSource, InputSourceKind } from './input-history.js';
 import {
   SMALL_KANA_TRIGGER,
   STEGANA,
   STEGANA_INVERT,
 } from './keyboards/pv-fifty-key-keyboard.js';
-import {LANGUAGES} from './language.js';
-import {sourceLocale, targetLocales} from './locale-codes.js';
+import { LANGUAGES } from './language.js';
+import { sourceLocale, targetLocales } from './locale-codes.js';
 import * as jaModule from './locales/ja.js';
-import {MacroApiClient} from './macro-api-client.js';
-import {pvAppStyle} from './pv-app-css.js';
-import type {CharacterSelectEvent} from './pv-expand-keypad.js';
-import type {PvFunctionsBar} from './pv-functions-bar.js';
-import {PvSentenceTypeSelectorElement} from './pv-sentence-type-selector.js';
-import type {PvSettingPanel} from './pv-setting-panel.js';
-import {PvSnackbar} from './pv-snackbar.js';
+import { MacroApiClient } from './macro-api-client.js';
+import { pvAppStyle } from './pv-app-css.js';
+import type { CharacterSelectEvent } from './pv-expand-keypad.js';
+import type { PvFunctionsBar } from './pv-functions-bar.js';
+import { PvSentenceTypeSelectorElement } from './pv-sentence-type-selector.js';
+import type { PvSettingPanel } from './pv-setting-panel.js';
+import { PvSnackbar } from './pv-snackbar.js';
 import {
   SentenceSuggestion,
   SentenceSuggestionSource,
   SuggestionSelectEvent,
 } from './pv-suggestion-stripe.js';
-import type {PvTextareaWrapper} from './pv-textarea-wrapper.js';
-import {State} from './state.js';
+import type { PvTextareaWrapper } from './pv-textarea-wrapper.js';
+import { State } from './state.js';
 
 const URL_PARAMS = {
   SENTENCE_MACRO_ID: 'sentenceMacroId',
@@ -78,7 +78,7 @@ const MODIFIABLE_TEXT_LENGTH = 10;
 const MAX_SENTENCE_LENGTH_NICE_TO_LLM = 30;
 const MAX_DIFFS = 10;
 
-const {setLocale} = configureLocalization({
+const { setLocale } = configureLocalization({
   sourceLocale,
   targetLocales,
   loadLocale: async locale => {
@@ -287,10 +287,10 @@ export class PvAppElement extends SignalWatcher(LitElement) {
     return this.stateInternal;
   }
 
-  @property({type: Array})
+  @property({ type: Array })
   suggestions: SentenceSuggestion[] = [];
 
-  @property({type: Array})
+  @property({ type: Array })
   words: string[] = [];
 
   @property()
@@ -305,13 +305,13 @@ export class PvAppElement extends SignalWatcher(LitElement) {
   @query('pv-setting-panel')
   private settingPanel?: PvSettingPanel;
 
-  @property({type: String, attribute: 'feature-locale'})
+  @property({ type: String, attribute: 'feature-locale' })
   locale = 'ja';
 
-  @property({type: String, attribute: 'feature-sentence-macro-id'})
+  @property({ type: String, attribute: 'feature-sentence-macro-id' })
   private sentenceMacroId: string | null = null;
 
-  @property({type: String, attribute: 'feature-languages'})
+  @property({ type: String, attribute: 'feature-languages' })
   languageLabels = 'japaneseWithSingleRowKeyboard,englishWithSingleRowKeyboard';
 
   private languageIndex = 0;
@@ -320,19 +320,19 @@ export class PvAppElement extends SignalWatcher(LitElement) {
   @query('.language-name')
   private languageName?: HTMLElement;
 
-  @property({type: Array})
+  @property({ type: Array })
   conversationHistory: [number, string][] = [];
 
-  @property({type: Array})
-  emotions: {emoji: string; prompt: string; label?: string}[] = [];
+  @property({ type: Array })
+  emotions: { emoji: string; prompt: string; label?: string }[] = [];
 
-  @property({type: String, attribute: 'feature-storage-domain'})
+  @property({ type: String, attribute: 'feature-storage-domain' })
   private featureStorageDomain = 'com.google.pv';
 
-  @property({type: Boolean, attribute: 'feature-enable-speech-input'})
+  @property({ type: Boolean, attribute: 'feature-enable-speech-input' })
   private featureEnableSpeechInput = false;
 
-  @property({type: Boolean, attribute: 'feature-enable-sentence-emotion'})
+  @property({ type: Boolean, attribute: 'feature-enable-sentence-emotion' })
   private featureEnableSentenceEmotion = false;
 
   @query('pv-sentence-type-selector')
@@ -693,7 +693,10 @@ export class PvAppElement extends SignalWatcher(LitElement) {
       source === SentenceSuggestionSource.HISTORY
         ? InputSourceKind.SENTENCE_HISTORY
         : InputSourceKind.SUGGESTED_SENTENCE;
-    this.textField?.setTextFieldValue(value, [{kind, index}]);
+    this.textField?.setTextFieldValue(value, [{ kind, index }]);
+    if (this.state.speakOnSuggestionSelect) {
+      this.speakText(value);
+    }
   }
 
   @playClickSound()
@@ -702,6 +705,28 @@ export class PvAppElement extends SignalWatcher(LitElement) {
     const concat = this.stateInternal.lang.appendWord(text, word);
     const normalized = normalize(concat);
     this.textField?.setTextFieldValue(normalized, [InputSource.SUGGESTED_WORD]);
+    if (this.state.speakOnSuggestionSelect) {
+      this.speakText(word);
+    }
+  }
+
+  private speakText(text: string) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = this.state.lang.code;
+    const speakingRateBase = 1.0;
+    const rateStep = 0.1;
+    utterance.rate = speakingRateBase + this.state.voiceSpeakingRate * rateStep;
+    const pitchBase = 1.0;
+    const pitchStep = 0.1;
+    utterance.pitch = pitchBase + this.state.voicePitch * pitchStep;
+    if (this.state.voiceName && this.state.voiceName !== 'Default') {
+      const voices = window.speechSynthesis.getVoices();
+      const voice = voices.find(v => v.name === this.state.voiceName);
+      if (voice) utterance.voice = voice;
+    }
+    window.speechSynthesis.speak(utterance);
   }
 
   @playClickSound()
@@ -779,7 +804,7 @@ export class PvAppElement extends SignalWatcher(LitElement) {
   }
 
   @playClickSound()
-  private onKeypadHandlerClick() {}
+  private onKeypadHandlerClick() { }
 
   onSnackbarClose() {
     // Do not clear textfield or set placeholder. Instead, add current value to inputHistory.
@@ -803,7 +828,7 @@ export class PvAppElement extends SignalWatcher(LitElement) {
 
   protected render() {
     const words = this.isBlank()
-      ? this.stateInternal.initialPhrases
+      ? this.stateInternal.initialPhrases.slice(0, INITIAL_WORD_SUGGESTION_LIMIT)
       : this.words;
     const bodyOfWordSuggestions = words.map(word =>
       !word
@@ -852,13 +877,13 @@ export class PvAppElement extends SignalWatcher(LitElement) {
         ></pv-functions-bar>
         <div class="main">
           ${this.state.features.featureEnableSentenceEmotion
-            ? html`
+        ? html`
                 <pv-sentence-type-selector
                   .sentenceTypes=${this.emotions}
                   @select=${this.onSentenceTypeSelected}
                 ></pv-sentence-type-selector>
               `
-            : ''}
+        : ''}
           <div class="keypad">
             <pv-character-input
               .state=${this.stateInternal}
@@ -881,9 +906,9 @@ export class PvAppElement extends SignalWatcher(LitElement) {
             <pv-textarea-wrapper
               .state=${this.stateInternal}
               @text-update=${(e: CustomEvent) => {
-                this.updateSuggestions();
-                this.updateMessageHistory(e.detail.sources);
-              }}
+        this.updateSuggestions();
+        this.updateMessageHistory(e.detail.sources);
+      }}
             ></pv-textarea-wrapper>
           </div>
           <div class="language-name">${this.stateInternal.lang.render()}</div>
@@ -891,12 +916,12 @@ export class PvAppElement extends SignalWatcher(LitElement) {
         </div>
         ${this.state.features.featureEnableSpeechInput &&
         this.state.enableConversationMode
-          ? html`<div class="conversation-history-container">
+        ? html`<div class="conversation-history-container">
               <pv-conversation-history
                 .history=${this.conversationHistory}
               ></pv-conversation-history>
             </div>`
-          : ''}
+        : ''}
       </div>
 
       <pv-snackbar @closed=${this.onSnackbarClose}></pv-snackbar>

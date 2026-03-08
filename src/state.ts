@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {signal} from '@lit-labs/signals';
-import {literal} from 'lit/static-html.js';
+import { signal } from '@lit-labs/signals';
+import { literal } from 'lit/static-html.js';
 
-import {ConfigStorage} from './config-storage.js';
-import {CONFIG_DEFAULT} from './constants.js';
-import {Language, LANGUAGES} from './language.js';
+import { ConfigStorage } from './config-storage.js';
+import { CONFIG_DEFAULT } from './constants.js';
+import { Language, LANGUAGES } from './language.js';
 
 interface Features {
   languages: string[];
@@ -277,6 +277,17 @@ class State {
     this.enableConversationModeSignal.set(newEnableConversationMode);
   }
 
+  private speakOnSuggestionSelectSignal = signal(false);
+
+  get speakOnSuggestionSelect() {
+    return this.speakOnSuggestionSelectSignal.get();
+  }
+
+  set speakOnSuggestionSelect(newValue: boolean) {
+    this.storage.write('speakOnSuggestionSelect', newValue);
+    this.speakOnSuggestionSelectSignal.set(newValue);
+  }
+
   private isMicrophoneOnSignal = signal(false);
 
   get isMicrophoneOn() {
@@ -344,6 +355,9 @@ class State {
     this.voiceNameInternal = this.storage.read('ttsVoice');
     this.voicePitchInternal = this.storage.read('voicePitch');
     this.voiceSpeakingRateInternal = this.storage.read('voiceSpeakingRate');
+    this.speakOnSuggestionSelectSignal.set(
+      this.storage.read('speakOnSuggestionSelect'),
+    );
   }
 
   /**
@@ -367,4 +381,4 @@ class State {
   }
 }
 
-export {Features, State};
+export { Features, State };

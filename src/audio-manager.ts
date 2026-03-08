@@ -45,7 +45,8 @@ fetch('static/chime.wav')
   });
 
 export class AudioManager {
-  static playClick(): Promise<void> {
+  static async playClick(): Promise<void> {
+    await ctx.resume();
     return new Promise((resolve, reject) => {
       if (!clickBuffer) {
         return reject('Click audio buffer is not loaded yet.');
@@ -61,7 +62,8 @@ export class AudioManager {
     });
   }
 
-  static playChime(): Promise<void> {
+  static async playChime(): Promise<void> {
+    await ctx.resume();
     return new Promise((resolve, reject) => {
       if (!chimeBuffer) {
         return reject('Chime audio buffer is not loaded yet.');

@@ -409,15 +409,22 @@ export class PvAppElement extends SignalWatcher(LitElement) {
   }
 
   private startSpeechRecognition() {
-    if (this.isSpeechRecognitionActive) return;
+    if (this.isSpeechRecognitionActive) {
+      console.log('[SpeechRecognition] Already active, skipping start.');
+      return;
+    }
     const SpeechRecognitionCtor =
       (window as any).SpeechRecognition ||
       (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognitionCtor) return;
+    if (!SpeechRecognitionCtor) {
+      console.error('[SpeechRecognition] API not supported in this browser.');
+      return;
+    }
     this.speechRecognition = new SpeechRecognitionCtor();
     if (!this.speechRecognition) {
       return;
     }
+    console.log('[SpeechRecognition] Starting with lang:', this.state.lang.code);
     this.speechRecognition.lang = this.state.lang.code;
     this.speechRecognition.continuous = true;
     this.speechRecognition.interimResults = false;
@@ -425,6 +432,7 @@ export class PvAppElement extends SignalWatcher(LitElement) {
       const lastResult = event.results[event.results.length - 1];
       if (lastResult && lastResult.isFinal && lastResult[0]) {
         const recognizedText = lastResult[0].transcript.trim();
+        console.log('[SpeechRecognition] Result:', recognizedText);
         if (recognizedText) {
           this.conversationHistory = [
             ...this.conversationHistory,
@@ -438,7 +446,8 @@ export class PvAppElement extends SignalWatcher(LitElement) {
         }
       }
     };
-    this.speechRecognition.onerror = () => {
+    this.speechRecognition.onerror = (event: any) => {
+      console.error('[SpeechRecognition] Error:', event.error);
       // Optionally handle errors (network, no-speech, etc)
       // For robustness, try to restart on recoverable errors
       this.stopSpeechRecognition();
@@ -451,6 +460,7 @@ export class PvAppElement extends SignalWatcher(LitElement) {
       }
     };
     this.speechRecognition.onend = () => {
+      console.log('[SpeechRecognition] Ended.');
       this.isSpeechRecognitionActive = false;
       // Once the speech recognition ends, restart it if the conversation mode is enabled
       // and the microphone is on.
@@ -461,6 +471,7 @@ export class PvAppElement extends SignalWatcher(LitElement) {
         this.state.features.featureEnableSpeechInput &&
         this.state.isMicrophoneOn
       ) {
+        console.log('[SpeechRecognition] Restarting...');
         this.startSpeechRecognition();
       }
     };
@@ -469,6 +480,7 @@ export class PvAppElement extends SignalWatcher(LitElement) {
   }
 
   private stopSpeechRecognition() {
+    console.log('[SpeechRecognition] Stopping...');
     if (this.speechRecognition) {
       this.speechRecognition.onresult = null;
       this.speechRecognition.onerror = null;

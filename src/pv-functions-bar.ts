@@ -19,14 +19,13 @@ import '@material/web/iconbutton/icon-button.js';
 import '@material/web/icon/icon.js';
 import './pv-setting-panel.js';
 
-import {localized, msg} from '@lit/localize';
-import {SignalWatcher} from '@lit-labs/signals';
-import {css, html, LitElement} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import { localized, msg } from '@lit/localize';
+import { SignalWatcher } from '@lit-labs/signals';
+import { css, html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
-import {AudioManager} from './audio-manager.js';
-import {CLOUD_TTS_VOICE_NAMES} from './constants.js';
-import {State} from './state.js';
+import { AudioManager } from './audio-manager.js';
+import { State } from './state.js';
 
 const EVENT_KEY = {
   backspaceClick: 'backspace-click',
@@ -45,7 +44,7 @@ type EventKey = (typeof EVENT_KEY)[keyof typeof EVENT_KEY];
 @localized()
 @customElement('pv-functions-bar')
 export class PvFunctionsBar extends SignalWatcher(LitElement) {
-  @property({type: Object})
+  @property({ type: Object })
   private state!: State;
 
   static styles = css`
@@ -163,7 +162,7 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
     }
   `;
 
-  @property({type: Boolean, reflect: true})
+  @property({ type: Boolean, reflect: true })
   isTtsReading = false;
 
   private lastOutputSpeechInternal = '';
@@ -172,7 +171,7 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
     return this.lastOutputSpeechInternal;
   }
 
-  @property({type: String, reflect: true})
+  @property({ type: String, reflect: true })
   private lastInputSpeechInternal = '';
 
   get lastInputSpeech() {
@@ -182,7 +181,7 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
   fireEvent(key: EventKey, detail?: unknown) {
     this.dispatchEvent(
       new CustomEvent(key, {
-        detail: detail ? {callee: this, ...detail} : {callee: this},
+        detail: detail ? { callee: this, ...detail } : { callee: this },
         bubbles: true,
         composed: true,
       }),
@@ -202,16 +201,16 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
         <div class="functions-bar">
           <button
             @click="${() => {
-              this.fireEvent(EVENT_KEY.undoClick);
-            }}"
+        this.fireEvent(EVENT_KEY.undoClick);
+      }}"
           >
             <md-icon>undo</md-icon>
             <span>${msg('Undo')}</span>
           </button>
           <button
             @click="${() => {
-              this.fireEvent(EVENT_KEY.backspaceClick);
-            }}"
+        this.fireEvent(EVENT_KEY.backspaceClick);
+      }}"
             ?disabled=${isTextEmpty}
           >
             <md-icon>backspace</md-icon>
@@ -219,8 +218,8 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
           </button>
           <button
             @click="${() => {
-              this.fireEvent(EVENT_KEY.deleteClick);
-            }}"
+        this.fireEvent(EVENT_KEY.deleteClick);
+      }}"
             ?disabled=${isTextEmpty}
           >
             <md-icon>delete</md-icon>
@@ -228,34 +227,34 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
           </button>
           <hr />
           ${isLanguageSwitchable
-            ? html`
+        ? html`
                 <button
                   @click="${() => {
-                    this.fireEvent(EVENT_KEY.languageChangeClick);
-                  }}"
+            this.fireEvent(EVENT_KEY.languageChangeClick);
+          }}"
                 >
                   <md-icon>language</md-icon>
                   <span>${msg('Language')}</span>
                 </button>
               `
-            : ''}
+        : ''}
           ${isKeyboardSwitchable
-            ? html`
+        ? html`
                 <button
                   @click="${() => {
-                    this.fireEvent(EVENT_KEY.keyboardChangeClick);
-                  }}"
+            this.fireEvent(EVENT_KEY.keyboardChangeClick);
+          }}"
                 >
                   <md-icon>language_japanese_kana</md-icon>
                   <span>${msg('Keyboard')}</span>
                 </button>
               `
-            : ''}
+        : ''}
           <hr />
           <button
             @click="${() => {
-              this.fireEvent(EVENT_KEY.contentCopyClick);
-            }}"
+        this.fireEvent(EVENT_KEY.contentCopyClick);
+      }}"
             ?disabled=${isTextEmpty}
           >
             <md-icon>content_copy</md-icon>
@@ -270,7 +269,7 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
             <span>${msg('Read aloud')}</span>
           </button>
           ${this.state.enableConversationMode
-            ? html`
+        ? html`
                 <button @click="${this.onMicrophoneClick}">
                   <md-icon
                     >${this.state.isMicrophoneOn ? 'mic' : 'mic_off'}</md-icon
@@ -278,13 +277,13 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
                   <span>${this.state.isMicrophoneOn ? 'Mute' : 'Unmute'}</span>
                 </button>
               `
-            : ''}
+        : ''}
 
           <hr />
           <button
             @click="${() => {
-              this.fireEvent(EVENT_KEY.settingClick);
-            }}"
+        this.fireEvent(EVENT_KEY.settingClick);
+      }}"
           >
             <md-icon>settings</md-icon>
             <span>${msg('Settings')}</span>
@@ -300,9 +299,14 @@ export class PvFunctionsBar extends SignalWatcher(LitElement) {
     this.state.lastOutputSpeech = this.state.text;
 
     if (this.state.enableEarcons) {
-      AudioManager.playChime().then(() => {
-        this.startTts();
-      });
+      AudioManager.playChime()
+        .then(() => {
+          this.startTts();
+        })
+        .catch(err => {
+          console.warn('Chime play failed, fallback to direct TTS:', err);
+          this.startTts();
+        });
     } else {
       this.startTts();
     }

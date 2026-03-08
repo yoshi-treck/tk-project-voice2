@@ -19,10 +19,10 @@ import { Config } from './config-storage.js';
 export const RUN_MACRO_ENDPOINT_URL = 'run-macro';
 
 export const CONFIG_DEFAULT: Config = {
-  aiConfig: 'smart',
+  aiConfig: 'fast',
   checkedLanguages: [],
-  enableConversationMode: false,
-  enableEarcons: false,
+  enableConversationMode: true,
+  enableEarcons: true,
   expandAtOrigin: false,
   initialPhrases: [],
   initialPhrasesPerLanguage: {},
@@ -32,7 +32,7 @@ export const CONFIG_DEFAULT: Config = {
   ttsVoice: '',
   voicePitch: 0.0,
   voiceSpeakingRate: 0.0,
-  speakOnSuggestionSelect: false,
+  speakOnSuggestionSelect: true,
 };
 
 export const LARGE_MARGIN_LINE_LIMIT = 4;

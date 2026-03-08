@@ -64,6 +64,9 @@ export class PvSettingPanel extends SignalWatcher(LitElement) {
     #form-id {
       height: 440px;
       width: 500px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 1rem;
     }
 
     .voice-config-slider {

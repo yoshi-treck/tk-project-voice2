@@ -118,6 +118,22 @@
   <source>Enable conversation mode</source>
   <target>会話モード</target>
 </trans-unit>
+<trans-unit id="sbd72ef798f281712">
+  <source>French (experimental)</source>
+</trans-unit>
+<trans-unit id="s408eb983f697801c">
+  <source>German (experimental)</source>
+</trans-unit>
+<trans-unit id="s5f836100f0c5709f">
+  <source>Swedish (experimental)</source>
+</trans-unit>
+<trans-unit id="s579d06c51e72b5a8">
+  <source>Mandarin (single-row keyboard)</source>
+</trans-unit>
+<trans-unit id="s6e3bb959a960acc2">
+  <source>Speak on suggestion select</source>
+  <target>選択時に読み上げる</target>
+</trans-unit>
 
 </body>
 </file>

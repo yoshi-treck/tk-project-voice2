@@ -4,7 +4,7 @@
   "description": "Communication support tool powered by generative AI",
   "scripts": {
     "dev": "concurrently \"npm run watch\" \"npm run serve\"",
-    "serve": "python main.py",
+    "serve": "cross-env PORT=5001 python main.py",
     "lint": "tsc --noEmit && gts lint 'src/**/*.ts' && python -m yapf --diff *.py tools/*.py",
     "clean": "gts clean",
     "build": "npm run build:i18n && npm run build:storybook && esbuild src/index.ts --bundle --minify --outfile=static/index.js",

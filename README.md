@@ -1,8 +1,8 @@
-# Project VOICE
+# VOICE2
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/google/project-voice)
 
-Project VOICE is an experimental software developed as a communication support tool using generative AI for people who have difficulty in vocalizing and / or typing due to disabilities.
+VOICE2 is an experimental software developed as a communication support tool using generative AI for people who have difficulty in vocalizing and / or typing due to disabilities.
 
 This software uses generative AI to predict possible words and sentences that might be implied by the user’s input. The user can select a suggested word or sentence using accessibility features such as eye tracking and / or switch access. We aim to enable users to input longer sentences in fewer steps than other input methods.
 
@@ -12,7 +12,7 @@ This software uses generative AI to predict possible words and sentences that mi
 
 ## Before you begin
 
-Project VOICE is a web application built on Gemini API, and it’s designed to be run on Google App Engine primarily. Please set up a Google Cloud project with these APIs enabled. You will also need to install Python and Node.js to build and run the application.
+VOICE2 is a web application built on Gemini API, and it’s designed to be run on Google App Engine primarily. Please set up a Google Cloud project with these APIs enabled. You will also need to install Python and Node.js to build and run the application.
 
 1. In the Google Cloud console, on the project selector page, select or create a Google Cloud project.\
     [Go to project selector](https://console.cloud.google.com/projectselector2/home/dashboard)
